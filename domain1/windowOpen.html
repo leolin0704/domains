@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    this is domain1
+    <br>
+    
+    <button id="open">新开页面</button>
+    <br>
+    <br>
+    <br>
+    <br>
+    <input id="txt" />
+    <button id="btn">提交</button>
+    <script>
+        var page
+        document.querySelector('#open').addEventListener('click', function(){
+            page = window.open('http://127.0.0.1:5600/index.html')
+        })
+
+        document.querySelector('#btn').addEventListener('click', function(){
+            var v = document.querySelector('#txt').value
+            page && page.postMessage(v, 'http://127.0.0.1:5600')
+        })
+        
+
+        window.addEventListener("message", receiveMessage, false);
+        function receiveMessage(event)
+        {
+            alert(event.data)
+        }
+    </script>
+</body>
+</html>
