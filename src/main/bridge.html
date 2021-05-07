@@ -15,10 +15,10 @@
         {
             console.log(event.data)
             axios.get('/status', {
+                withCredentials: true,
                 params: {
                     data: event.data
-                },
-                withCredentials: true
+                }
             }).then(function() {
                 event.source.postMessage('received', event.origin)
             }).catch(function(){
