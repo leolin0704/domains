@@ -1,0 +1,25 @@
+{
+  "name": "domains",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --inspect=9229 ./src/main.js",
+    "client": "node ./src/client.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leolin0704/domains.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leolin0704/domains/issues"
+  },
+  "homepage": "https://github.com/leolin0704/domains#readme",
+  "dependencies": {
+    "fastify": "^3.15.1",
+    "fastify-static": "^4.0.1"
+  }
+}
