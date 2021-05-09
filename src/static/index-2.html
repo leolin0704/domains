@@ -9,11 +9,20 @@
 <body>
     this is domain1
     <br>
+    cookie: <span id="spnCookie"></span>
     <br>
-    Cookie: <span id="content"></span>
+    <br>
+    <button>make request</button>
+    <button id="btnCookie">show cookie</button>
+    <iframe src="http://127.0.0.1:3000/public/bridge.html"></iframe>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         var loginDate = new Date().toISOString()
         document.cookie = 'date=' + loginDate
+
+        document.querySelector('#btnCookie').addEventListener('click', function() {
+            document.querySelector('#spnCookie').innerHTML = document.cookie
+        })
 
         // setInterval(function() {
         //     document.querySelector('#content').innerHTML = document.cookie

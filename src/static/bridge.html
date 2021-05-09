@@ -8,8 +8,18 @@
 </head>
 <body>
     this is domain2
+    <br>
+    cookie: <span id="spnCookie"></span>
+    <br>
+
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+
+        setInterval(function() {
+            console.log(document.cookie)
+            document.querySelector('#spnCookie').innerHTML = document.cookie
+        }, 2000)
+
         window.addEventListener("message", receiveMessage, false);
         function receiveMessage(event)
         {

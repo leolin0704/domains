@@ -8,10 +8,23 @@
 </head>
 <body>
     this is domain2
-
+    <input id="base" value="http://127.0.0.1:3000" /> <button id="btnLoad">Load</button>
+    <br>
     <input id="txt" /> <button id="btn">submit</button>
-    <script src="http://127.0.0.1:3000/public/bridge.js"></script>
     <script>
+        //创建一个script标签
+        function loadScriptString() {
+            var script = document.createElement("script");  //创建一个script标签
+            script.type = "text/javascript";
+            script.src =  document.querySelector('#base').value + "/public/bridge.js"
+
+            document.querySelector('head').appendChild(script);
+        }
+        
+        document.querySelector('#btnLoad').addEventListener('click', function() {
+            loadScriptString()
+        })
+
         document.querySelector('#btn').addEventListener('click', function() {
             var val = document.querySelector('#txt').value
             window.postHSBC && window.postHSBC(val)
