@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #subIframe {
+            display: block;
+            height: 850px;
+            width: 100%;
+        }
+
+        span{
+            line-height: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <fieldset>
+        <legend>document / window</legend>
+        <fieldset>
+            <legend>local storage</legend>
+            <span id="localStorage1"></span>
+        </fieldset>
+        <fieldset>
+            <legend>session storage</legend>
+            <span id="sessionStorage1"></span>
+        </fieldset>
+        <fieldset>
+            <legend>cookie storage</legend>
+            <span id="cookie1"></span>
+        </fieldset>
+    </fieldset>
+
+    <fieldset>
+        <legend>subIframe.contentDocument / subIframe.contentWIndow</legend>
+        <fieldset>
+            <legend>local storage</legend>
+            <span id="localStorage2"></span>
+        </fieldset>
+        <fieldset>
+            <legend>session storage</legend>
+            <span id="sessionStorage2"></span>
+        </fieldset>
+        <fieldset>
+            <legend>cookie storage</legend>
+            <span id="cookie2"></span>
+        </fieldset>
+    </fieldset>
+
+    <button id="btnRefresh">Refresh</button>
+    <br>
+    <br>
+    <iframe id="subIframe" src="./sub.html" frameborder="0"></iframe>
+    <script>
+        document.cookie = 'main=1'
+        document.cookie = 'test=main'
+        localStorage.setItem('mainLocal', 'main local')
+        sessionStorage.setItem('mainSession', 'main session')
+
+        window.sub = $('#subIframe')[0]
+
+        function tryRun(cb) {
+            try {
+                return cb()
+            }
+            catch (e) {
+                console.error(e)
+            }
+        }
+
+        function fresh1() {
+            tryRun(function() {
+                var subCookie = document.cookie
+                $('#cookie1').html(subCookie.split(';').join('<br/>'))
+            })
+
+            tryRun(function() {
+                var subLocal = window.localStorage.getItem('subLocal')
+                var mainLocal = window.localStorage.getItem('mainLocal')
+                $('#localStorage1').html('mainLocal=' + mainLocal + '<br />subLocal=' + subLocal)
+            })
+
+            tryRun(function() {
+                var subSession = window.sessionStorage.getItem('subSession')
+                var mainSession = window.sessionStorage.getItem('mainSession')
+                $('#sessionStorage1').html('mainSession=' + mainSession + '<br/>subSession=' + subSession)
+            })
+        }
+
+        function fresh2() {
+            var subDoc =  window.sub.contentDocument
+            var subWindow =  window.sub.contentWindow
+            tryRun(function() {
+                var subCookie = subDoc.cookie
+                $('#cookie2').html(subCookie.split(';').join('<br/>'))
+            })
+            tryRun(function() {
+                var subLocal = subWindow.localStorage.getItem('subLocal')
+                var mainLocal = subWindow.localStorage.getItem('mainLocal')
+                $('#localStorage2').html('mainLocal=' + mainLocal + '<br />subLocal=' + subLocal)
+            })
+            tryRun(function() {
+                var subSession = subWindow.sessionStorage.getItem('subSession')
+                var mainSession = subWindow.sessionStorage.getItem('mainSession')
+                $('#sessionStorage2').html('mainSession=' + mainSession + '<br/>subSession=' + subSession)
+            })
+        }
+
+        $('#btnRefresh').click(function(){
+            fresh1()
+            fresh2()
+        })
+
+
+        window.sub.onload = function(){
+            $('#btnRefresh').trigger('click')
+        }
+
+        
+    </script>
+</body>
+</html>

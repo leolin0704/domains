@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        html,body {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            background-color: #81d8d0;
+        }
+        span{
+            line-height: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    
+    <fieldset>
+        <legend>document / window</legend>
+        <fieldset>
+            <legend>local storage</legend>
+            <span id="localStorage1"></span>
+        </fieldset>
+        <fieldset>
+            <legend>session storage</legend>
+            <span id="sessionStorage1"></span>
+        </fieldset>
+        <fieldset>
+            <legend>cookie storage</legend>
+            <span id="cookie1"></span>
+        </fieldset>
+    </fieldset>
+
+    <fieldset>
+        <legend>parent.document / parent.window</legend>
+        <fieldset>
+            <legend>local storage</legend>
+            <span id="localStorage2"></span>
+        </fieldset>
+        <fieldset>
+            <legend>session storage</legend>
+            <span id="sessionStorage2"></span>
+        </fieldset>
+        <fieldset>
+            <legend>cookie storage</legend>
+            <span id="cookie2"></span>
+        </fieldset>
+    </fieldset>
+
+    <button id="btnRefresh">Refresh</button>
+    <script>
+        document.cookie = 'sub=1'
+        document.cookie = 'test=sub'
+        localStorage.setItem('subLocal', 'sub local')
+        sessionStorage.setItem('subSession', 'sub session')
+        
+        function tryRun(cb) {
+            try {
+                return cb()
+            }
+            catch (e) {
+                console.error(e)
+            }
+        }
+
+        function fresh1() {
+            tryRun(function() {
+                const subCookie = document.cookie
+                $('#cookie1').html(subCookie.split(';').join('<br/>'))
+            })
+
+            tryRun(function() {
+                const subLocal = window.localStorage.getItem('subLocal')
+                const mainLocal = window.localStorage.getItem('mainLocal')
+                $('#localStorage1').html('mainLocal=' + mainLocal + '<br />subLocal=' + subLocal)
+            })
+
+            tryRun(function() {
+                const subSession = window.sessionStorage.getItem('subSession')
+                const mainSession = window.sessionStorage.getItem('mainSession')
+                $('#sessionStorage1').html('mainSession=' + mainSession + '<br/>subSession=' + subSession)
+            })
+        }
+
+        function fresh2() {
+            const parentDoc =  window.parent.document
+            const parentWindow =  window.parent.window
+            tryRun(function() {
+                const parentCookie = parentDoc.cookie
+                $('#cookie2').html(parentCookie.split(';').join('<br/>'))
+            })
+            tryRun(function() {
+                const subLocal = parentWindow.localStorage.getItem('subLocal')
+                const mainLocal = parentWindow.localStorage.getItem('mainLocal')
+                $('#localStorage2').html('mainLocal=' + mainLocal + '<br />subLocal=' + subLocal)
+            })
+            tryRun(function() {
+                const subSession = parentWindow.sessionStorage.getItem('subSession')
+                const mainSession = parentWindow.sessionStorage.getItem('mainSession')
+                $('#sessionStorage2').html('mainSession=' + mainSession + '<br/>subSession=' + subSession)
+            })
+        }
+
+        $('#btnRefresh').click(function(){
+            fresh1()
+            fresh2()
+        })
+
+
+        $(window).on('load', function(){
+            $('#btnRefresh').trigger('click')
+        })
+
+    </script>
+</body>
+</html>
